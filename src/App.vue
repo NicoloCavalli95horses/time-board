@@ -1,25 +1,23 @@
 
 <template>
-  <div class="main">
-    <div class="col">
-      <h2>Entrance</h2>
-      <InputTime v-model:time="time[0]" />
-      <h2>Exit</h2>
-      <InputTime v-model:time="time[1]" />
-    </div>
-    <div class="col">
-      <h2>Entrance</h2>
-      <InputTime v-model:time="time[2]" />
-      <h2>Exit</h2>
-      <InputTime v-model:time="time[3]" />
-    </div>
-    <div class="col">
-      <h2>Total time</h2>
-      <span :class="{ 'green' : totTimeMs >= EIGHT_HOURS_MS }">{{ totTimeF }}</span>
-      <h2>Remaining time</h2>
-      <span :class="[ totTimeMs >= EIGHT_HOURS_MS ? 'green' : 'red']">{{ remainingTimeF }}</span>
-    </div>
-  </div>
+  <h1>Quanto manca...?</h1>
+  <br><br>
+  <p class="flex">Oggi devo lavorare:
+    <div class="btn-incr" @click="editTotalHour(0.5)">+</div>
+    {{ totalHour }}
+    <div class="btn-incr" @click="editTotalHour(-0.5)">-</div>
+    ore
+  </p>
+  
+  <p class="flex">Stamattina ho trimbrato alle
+  <InputTime v-model:time="inTime" />
+  </p>
+  
+  <p class="flex">Durata della pausa pranzo
+  <InputTime v-model:time="lunchBreakTime" />
+  </p>
+
+  <p>Posso uscire alle: {{ formatTimeMs(outTime) }}</p>
 </template>
 
 
@@ -34,23 +32,18 @@ import InputTime from './components/InputTime.vue'
 //===========================
 // Consts
 //===========================
-const time = ref( [
-  '09:00',
-  '12:30',
-  '13:30',
-  '18:00'
-] );
+const totalHour = ref( '07:00' );
+const inTime = ref( '08:30' );
+const lunchBreakTime = ref( '00:45' );
 
-const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
-
-const totTimeMs = computed(() => {
-  const morning = Math.abs(timeToMilliseconds(time.value[0]) - timeToMilliseconds(time.value[1]));
-  const afternoon = Math.abs(timeToMilliseconds(time.value[2]) - timeToMilliseconds(time.value[3]));
-  return morning + afternoon;
+const outTime = computed(() => {
+  const initT = timeToMilliseconds(inTime.value);
+  const breakT = timeToMilliseconds(lunchBreakTime.value);
+  const totNowT = initT + breakT;
+  const totDayT = timeToMilliseconds(totalHour.value);
+  return totNowT + totDayT;
 });
 
-const totTimeF       = computed( () => formatTimeMs( totTimeMs.value ));
-const remainingTimeF = computed( () => formatTimeMs( Math.abs(EIGHT_HOURS_MS - totTimeMs.value) ));
 
 
 //===========================
@@ -68,6 +61,17 @@ function timeToMilliseconds(time) {
   const [h, m] = time.split(':');
   return (parseInt(h, 10) * 60 + parseInt(m, 10)) * 60 * 1000;
 }
+
+function editTotalHour(incr) {
+  const [h, m] = totalHour.value.split(':').map(Number);
+  let val = h + m / 60;
+  val += incr;
+  val = Math.max(1, Math.min(12, val));
+  const hh = String(Math.floor(val)).padStart(2, '0');
+  const mm = val % 1 === 0 ? '00' : '30';
+  totalHour.value = `${hh}:${mm}`;
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -93,5 +97,17 @@ span {
 }
 .red {
   color: orangered;
+}
+
+.btn-incr {
+  cursor: pointer;
+  background-color: #18b918ff;
+  border-radius: 12px;
+  margin: 0px 12px;
+  width: 60px;
+  height: 60px;
+  font-size: 34px;
+  display: grid;
+  place-items: center;
 }
 </style>
