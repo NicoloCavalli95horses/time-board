@@ -5,7 +5,7 @@
   </nav>
   <div class="grid">
     <div class="card">
-      <p>Oggi devo lavorare</p>
+      <p>Ore di lavoro</p>
       <div class="flex">
         <Counter v-model:count="workingHours" label="ore" />
       </div>
@@ -69,10 +69,9 @@ function timeToMinutes(time) {
 
 <style lang="scss" scoped>
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  grid-gap: 12px;
-  margin: 12px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 18px;
 }
 
 span {
@@ -83,9 +82,11 @@ span {
 .info {
   background-color: rgba(37, 99, 235, 0.2);
   height: 100%;
+  margin-top: 22px;
   .wrapper  {
     margin: 0 20px 0 20px;
-    padding: 54px 0;
+    padding-top: 24px;
+    padding-bottom: 84px;    
   }
   span {
     font-size: 32px;
@@ -101,8 +102,9 @@ span {
 }
 
 .card {
-  border-radius: 24px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-top: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
   background-color: rgba(51, 68, 68, 0.4);
 }

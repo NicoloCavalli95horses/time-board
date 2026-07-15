@@ -1,5 +1,7 @@
 <template>
-  <input type="time" v-model="input" />
+  <div class="input-wrapper">
+    <input type="time" v-model="input" />
+  </div>
 </template>
 
 <script setup>
@@ -24,26 +26,29 @@ const emit = defineEmits([
 //===========================
 // Consts
 //===========================
-const input = ref( props.time );
+const input = ref(props.time);
 
 
 //===========================
 // Watchers
 //===========================
-watch( input, (newVal) => {
+watch(input, (newVal) => {
   emit('update:time', newVal);
 });
 
 </script>
 
 <style lang="scss" scoped>
-input[type="time"] {
-  font-size: 44px;
-  padding: 10px;
-  background-color: rgb(33,33,33); 
-  border: none;
-  outline: none; 
-  border-radius: 12px;
-  font-family: monospace;
+.input-wrapper {
+  
+  input[type="time"] {
+    width: 100%;
+    max-width: 320px;
+    font-size: 44px;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 12px;
+    font-family: monospace;
+  }
 }
 </style>
