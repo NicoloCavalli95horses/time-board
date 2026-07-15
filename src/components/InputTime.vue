@@ -45,7 +45,7 @@ watch(input, (newVal) => {
     width: 100%;
     max-width: 320px;
     font-size: 44px;
-    background-color: #2563eb;
+    background: none;
     border: none;
     border-radius: 12px;
     font-family: monospace;

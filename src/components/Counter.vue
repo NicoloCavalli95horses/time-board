@@ -3,13 +3,13 @@
     <div class="flex">
       <div class="btn-incr" @click="emit('update:count', Math.max(min, count - incr))">
         <svg viewBox="0 0 24 24">
-          <path d="M6 12L18 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M6 12L18 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
       <span>{{ count }}</span>
       <div class="btn-incr" @click="emit('update:count', count + incr)">
         <svg viewBox="0 0 24 24">
-          <path d="M4 12H20M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          <path d="M4 12H20M12 4V20" stroke="white" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
       </div>
@@ -76,4 +76,5 @@ span {
 .btn-incr:active {
   transform: scale(.95);
 }
+
 </style>
