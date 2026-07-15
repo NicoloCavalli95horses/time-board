@@ -23,7 +23,7 @@
 
       <div class="card">
         <p>{{ translate("lunch break duration") }}</p>
-        <Counter v-model:count="lunchBreakTimeMin" :incr="15" label="minuti" />
+        <Counter v-model:count="lunchBreakTimeMin" :incr="15" :label="translate('minutes')" />
       </div>
     </div>
   </div>

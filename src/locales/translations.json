@@ -19,10 +19,15 @@
     "en": "Working hours",
     "fr": "Heures de travail"
   },
-   "hours": {
+  "hours": {
     "it": "Ore",
     "en": "Hours",
     "fr": "Heures"
+  },
+  "minutes": {
+    "it": "Minuti",
+    "en": "Minutes",
+    "fr": "Minutes"
   },
   "entry time": {
     "it": "Orario di ingresso",
