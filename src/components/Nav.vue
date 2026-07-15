@@ -1,9 +1,7 @@
 <template>
   <nav>
-    <div class="time-icon">⏳</div>
-    <h1>{{translate("clock out time") }}</h1>
-    <div class="grow"></div>
-    <LangToggle />
+    <LangToggle class="lang-wrapper" />
+    <h1>⏳{{translate("clock out time") }}</h1>
   </nav>
 </template>
 
@@ -19,12 +17,11 @@ import LangToggle from './LangToggle.vue';
 
 <style lang="scss" scoped>
 nav {
-  height: 100px;
   display: flex;
-  align-items: center;
-
-  .time-icon {
-    font-size: 44px;
+  flex-direction: column;
+  .lang-wrapper {
+    margin: 8px;
+    text-align: right;
   }
 }
 </style>

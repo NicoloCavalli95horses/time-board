@@ -25,7 +25,14 @@
         <p>{{ translate("lunch break duration") }}</p>
         <Counter v-model:count="lunchBreakTimeMin" :incr="15" :label="translate('minutes')" />
       </div>
+
+      <div class="card">
+        <p>{{ translate("notify me before") }}</p>
+        <Counter v-model:count="notifyTimeMin" :incr="5" :label="translate('minutes')" />
+      </div>
     </div>
+
+    <Footer />
   </div>
 
 </template>
@@ -35,13 +42,15 @@
 //===========================
 // Import
 //===========================
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { minutesToTime } from './utils';
+import { translate } from './i18n.js';
+
 import InputTime from './components/InputTime.vue'
 import Counter from './components/Counter.vue'
 import TimeProgress from './components/TimeProgress.vue';
 import Nav from './components/Nav.vue';
-import { translate } from './i18n.js';
+import Footer from './components/Footer.vue';
 
 
 //===========================
@@ -49,13 +58,18 @@ import { translate } from './i18n.js';
 //===========================
 const workingHours = ref(8);
 const lunchBreakTimeMin = ref(45);
-const inTime = ref('08:30');
+const notifyTimeMin = ref(15);
+const inTime = ref("08:30");
+
+let notificationTimer = null;
 
 const outTimeMin = computed(() =>
   timeToMinutes(inTime.value) +
   workingHours.value * 60 +
   lunchBreakTimeMin.value
 );
+
+const notifyAtMin = computed(() => outTimeMin.value - notifyTimeMin.value);
 
 
 //===========================
@@ -66,14 +80,79 @@ function timeToMinutes(time) {
   return h * 60 + m;
 }
 
+function scheduleNotification() {
+  // reset timer
+  if (notificationTimer !== null) {
+    clearTimeout(notificationTimer);
+    notificationTimer = null;
+  }
+
+  const notificationDate = new Date();
+  notificationDate.setHours(Math.floor(notifyAtMin.value / 60), notifyAtMin.value % 60,0,0);
+  const delay = notificationDate.getTime() - Date.now();
+
+  // Do not schedule if the time is already passed
+  if (delay <= 0) { return; }
+
+  notificationTimer = setTimeout(() => {
+    new Notification(`⏰ ${notifyTimeMin.value} ${translate('minutes')} ${translate('and you can go home')}`);
+    notificationTimer = null;
+  }, delay);
+}
+
+
+
+//===========================
+// Watch
+//===========================
+watch(
+  [workingHours, lunchBreakTimeMin, inTime, notifyTimeMin],
+  () => {
+    localStorage.setItem("workingHours", workingHours.value);
+    localStorage.setItem("lunchBreakTimeMin", lunchBreakTimeMin.value);
+    localStorage.setItem("inTime", inTime.value);
+    localStorage.setItem("notifyTimeMin", notifyTimeMin.value);
+
+    if (Notification.permission === "granted") {
+      scheduleNotification();
+    }
+  }
+);
+
+
+
+//===========================
+// Life cycle
+//===========================
+onMounted(async () => {
+  // set from local storage
+  workingHours.value = Number(localStorage.getItem("workingHours") ?? 8);
+  lunchBreakTimeMin.value = Number(localStorage.getItem("lunchBreakTimeMin") ?? 45);
+  notifyTimeMin.value = Number(localStorage.getItem("notifyTimeMin") ?? 15);
+  inTime.value = localStorage.getItem("inTime") ?? "08:30";
+
+  // handle notification
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    scheduleNotification();
+  }
+});
+
 </script>
 
 <style lang="scss" scoped>
 .main {
-  margin: 0 22px;
+  max-width: 900px;
+  margin: 0 auto;
+
   .grid {
     display: flex;
     flex-direction: column;
+  }
+
+  @media (width <=900px) {
+    margin: 0 22px;
   }
 }
 
@@ -108,9 +187,9 @@ span {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  border-radius: 12px;
-  padding: 16px 24px;
-  margin-top: 16px;
+  border-radius: 18px;
+  padding: 8px 24px;
+  margin-top: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
   background-color: rgba(51, 68, 68, 0.4);
 

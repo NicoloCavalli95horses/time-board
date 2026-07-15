@@ -1,8 +1,8 @@
 {
   "clock out time": {
-    "it": "A che ora posso uscire oggi?",
-    "en": "Clock Out Time",
-    "fr": "Mon départ aujourd'hui"
+    "it": "A che ora si finisce oggi?",
+    "en": "What time do we finish today?",
+    "fr": "On finit à quelle heure aujourd'hui ?"
   },
   "exit time": {
     "it": "Orario di uscita",
@@ -38,5 +38,15 @@
     "it": "Durata della pausa pranzo",
     "en": "Lunch break duration",
     "fr": "Durée de la pause déjeuner"
+  },
+  "notify me before": {
+    "it": "Avvisami prima",
+    "en": "Notify me before",
+    "fr": "Prévenez-moi avant"
+  },
+    "and you can go home": {
+    "it": "...e puoi andare a casa!",
+    "en": "...and you can go home!",
+    "fr": "...et tu peux rentrer chez toi !"
   }
 }
