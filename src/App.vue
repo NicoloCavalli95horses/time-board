@@ -1,23 +1,33 @@
-
 <template>
-  <h1>Quanto manca...?</h1>
-  <br><br>
-  <p class="flex">Oggi devo lavorare:
-    <div class="btn-incr" @click="editTotalHour(0.5)">+</div>
-    {{ totalHour }}
-    <div class="btn-incr" @click="editTotalHour(-0.5)">-</div>
-    ore
-  </p>
-  
-  <p class="flex">Stamattina ho trimbrato alle
-  <InputTime v-model:time="inTime" />
-  </p>
-  
-  <p class="flex">Durata della pausa pranzo
-  <InputTime v-model:time="lunchBreakTime" />
-  </p>
+  <nav>
+    <div class="time-icon">⏳</div>
+    <h1 class="grow t-center">Time board</h1>
+  </nav>
+  <div class="grid">
+    <div class="card">
+      <p>Oggi devo lavorare</p>
+      <div class="flex">
+        <Counter v-model:count="workingHours" label="ore" />
+      </div>
+    </div>
 
-  <p>Posso uscire alle: {{ formatTimeMs(outTime) }}</p>
+    <div class="card">
+      <p>Orario di ingresso</p>
+      <InputTime v-model:time="inTime" />
+    </div>
+
+    <div class="card">
+      <p>Durata della pausa pranzo</p>
+      <Counter v-model:count="lunchBreakTimeMin" :incr="15" label="minuti" />
+    </div>    
+  </div>
+
+    <div class="info">
+      <div class="wrapper">
+        <p>Orario di uscita<span>{{ minutesToTime(outTimeMin) }}</span> </p>
+        <TimeProgress :min="timeToMinutes(inTime)" :max="outTimeMin" />
+      </div>
+    </div>
 </template>
 
 
@@ -25,89 +35,75 @@
 //===========================
 // Import
 //===========================
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { minutesToTime } from './utils';
+
 import InputTime from './components/InputTime.vue'
+import Counter from './components/Counter.vue'
+import TimeProgress from './components/TimeProgress.vue';
 
 
 //===========================
 // Consts
 //===========================
-const totalHour = ref( '07:00' );
-const inTime = ref( '08:30' );
-const lunchBreakTime = ref( '00:45' );
+const workingHours = ref(8);
+const lunchBreakTimeMin = ref(45);
+const inTime = ref('08:30');
 
-const outTime = computed(() => {
-  const initT = timeToMilliseconds(inTime.value);
-  const breakT = timeToMilliseconds(lunchBreakTime.value);
-  const totNowT = initT + breakT;
-  const totDayT = timeToMilliseconds(totalHour.value);
-  return totNowT + totDayT;
-});
-
+const outTimeMin = computed(() =>
+  timeToMinutes(inTime.value) +
+  workingHours.value * 60 +
+  lunchBreakTimeMin.value
+);
 
 
 //===========================
 // Functions
 //===========================
-function formatTimeMs( ms ) {
-  const h = Math.floor(ms / (1000 * 60 * 60));
-  const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-  const hh = String(h).padStart(2, '0');
-  const mm = String(m).padStart(2, '0');
-  return `${hh}:${mm}`;
-}
-
-function timeToMilliseconds(time) {
-  const [h, m] = time.split(':');
-  return (parseInt(h, 10) * 60 + parseInt(m, 10)) * 60 * 1000;
-}
-
-function editTotalHour(incr) {
-  const [h, m] = totalHour.value.split(':').map(Number);
-  let val = h + m / 60;
-  val += incr;
-  val = Math.max(1, Math.min(12, val));
-  const hh = String(Math.floor(val)).padStart(2, '0');
-  const mm = val % 1 === 0 ? '00' : '30';
-  totalHour.value = `${hh}:${mm}`;
+function timeToMinutes(time) {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
 }
 
 </script>
 
 <style lang="scss" scoped>
-.main {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr) );
-  grid-gap: 22px;
-  width: calc(100% - 44px);
-  height: calc(100vh - 44px);
-  margin: 22px;
-  .col {
-    display: flex;
-    flex-direction: column;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 12px;
+  margin: 12px;
 }
 
 span {
   font-family: monospace;
   font-size: 42px;
 }
-.green {
-  color: greenyellow;
-}
-.red {
-  color: orangered;
+
+.info {
+  background-color: rgba(37, 99, 235, 0.2);
+  height: 100%;
+  .wrapper  {
+    margin: 0 20px 0 20px;
+    padding: 54px 0;
+  }
+  span {
+    font-size: 32px;
+    border: 1px solid white;
+    padding: 4px;
+    margin-left: 10px;
+    border-radius: 4px;
+  }
 }
 
-.btn-incr {
-  cursor: pointer;
-  background-color: #18b918ff;
-  border-radius: 12px;
-  margin: 0px 12px;
-  width: 60px;
-  height: 60px;
-  font-size: 34px;
-  display: grid;
-  place-items: center;
+.time-icon {
+  font-size: 44px;
+}
+
+.card {
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
+  background-color: rgba(51, 68, 68, 0.4);
 }
 </style>

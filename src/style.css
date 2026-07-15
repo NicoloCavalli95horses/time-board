@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Signika+Negative&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
 :root {
@@ -20,6 +20,8 @@
 
 body {
   user-select: none;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -28,15 +30,49 @@ h2, h5,ul, li, a, span, input, textarea, label, summary, details, .article-conte
 }
 
 h1, h3, h4, p {
-  font-family: 'Signika Negative', sans-serif;
+  font-family: 'Archivo Black', sans-serif;
 }
 
 .flex {
   display: flex;
   align-items: center;
   /* justify-content: center; */
+  flex-wrap: wrap;
+}
+
+
+h1 {
+  font-size: clamp(2rem, 4vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 2rem);
 }
 
 p {
-  font-size: 1.4rem;
+  font-size: clamp(1rem, 0.3vw + 0.95rem, 1.125rem);
+}
+
+nav {
+  height: 100px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #2563eb, #0c016f);
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.t-center {
+  text-align: center;
+}
+
+svg {
+  color: white;
 }

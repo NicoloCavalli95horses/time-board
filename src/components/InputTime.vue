@@ -38,8 +38,8 @@ watch( input, (newVal) => {
 
 <style lang="scss" scoped>
 input[type="time"] {
-  font-size: 55px;
-  padding: 12px 18px;
+  font-size: 44px;
+  padding: 10px;
   background-color: rgb(33,33,33); 
   border: none;
   outline: none; 
