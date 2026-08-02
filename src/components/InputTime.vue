@@ -49,6 +49,7 @@ watch(input, (newVal) => {
     border: none;
     border-radius: 12px;
     font-family: monospace;
+    color: white !important;
   }
 }
 </style>
