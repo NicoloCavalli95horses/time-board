@@ -1,18 +1,9 @@
 <template>
   <div class="flex">
     <div class="flex">
-      <div class="btn-incr" @click="emit('update:count', Math.max(min, count - incr))">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M6 12L18 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </div>
+      <div class="btn-incr" @click="emit('update:count', Math.max(min, count - incr))">&minus;</div>
       <span>{{ count }}</span>
-      <div class="btn-incr" @click="emit('update:count', count + incr)">
-        <svg class="icon" viewBox="0 0 24 24">
-          <path d="M4 12H20M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </div>
+      <div class="btn-incr" @click="emit('update:count', count + incr)">&plus;</div>
     </div>
     {{ label }}
   </div>
@@ -62,6 +53,8 @@ const emit = defineEmits([
   color: white;
   cursor: pointer;
   transition: .2s;
+  font-size: 44px;
+  font-family: monospace;
 }
 
 span {
@@ -75,14 +68,6 @@ span {
 
 .btn-incr:active {
   transform: scale(.95);
-}
-
-.icon {
-  color: white;
-  svg, svg path {
-    stroke: white;
-    color: white;
-  }
 }
 
 </style>
